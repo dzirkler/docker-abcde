@@ -34,14 +34,26 @@ CMD ["/sbin/my_init"]
 #########################################
 
 # Install steps for X app
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y xterm abcde cd-discid flac cdparanoia id3 id3v2 eject 
-ADD files/abcde.conf /etc/abcde.conf
+RUN apt-get update &&\
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        xterm \
+        abcde \
+        cd-discid \
+        flac \ 
+        cdparanoia \
+        id3 \
+        id3v2 \
+        eject &&\ 
+    apt-get clean &&\
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 
 # Copy X app start script to right location
+ADD files/abcde.conf /etc/abcde.conf
 ADD files/startapp.sh /startapp.sh
 ADD files/firstrun.sh /etc/my_init.d/firstrun.sh
-RUN chmod +x /startapp.sh && chmod +x /etc/my_init.d/firstrun.sh 
+RUN chmod +x /startapp.sh &&\
+    chmod +x /etc/my_init.d/firstrun.sh 
 
 
 #########################################
