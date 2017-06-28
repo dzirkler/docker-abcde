@@ -1,0 +1,30 @@
+version: '1.0'
+
+steps:
+
+   buildimage:
+      type: build
+      description: Build Docker Image
+      dockerfile: Dockerfile
+      image_name: dzirkler/abcde
+      tag: latest-cf-build-candidate
+
+   push_image:
+      type: push
+      candidate: ${{buildimage}}
+      tag: latest
+      when:
+        branch:
+          only:
+            - master
+
+   push_image1:
+      type: push
+      candidate: ${{buildimage}}
+      tag: ${{CF_BRANCH_TAG_NORMALIZED}}-${{CF_SHORT_REVISION}}
+      when:
+        condition:
+            all:
+              masterBranch: '"${{CF_BRANCH}}" != "master"'
+              
+     
